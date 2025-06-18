@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine & Drug Interaction Advisor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(124, 58, 237, 0.8); }
+            100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.5); }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(to right, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+        }
+        
+        .loader {
+            border-top-color: #8b5cf6;
+            -webkit-animation: spinner 1.5s linear infinite;
+            animation: spinner 1.5s linear infinite;
+        }
+        
+        @-webkit-keyframes spinner {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+        
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div class="absolute top-40 left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+    </div>
+    
+    <!-- Header -->
+    <header class="relative z-10 bg-gray-800/50 backdrop-blur-md border-b border-gray-700">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center float-animation">
+                        <i class="fas fa-pills text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold gradient-text">Medicine & Drug Advisor</h1>
+                        <p class="text-gray-400 text-sm">AI-Powered Medicine Information System</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm flex items-center">
+                        <span class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+                        API Online
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 relative z-10">
+        <!-- Tabs -->
+        <div class="flex space-x-2 mb-8">
+            <button onclick="switchTab('general')" class="tab-btn active px-6 py-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-all duration-300 flex items-center space-x-2">
+                <i class="fas fa-question-circle"></i>
+                <span>General Query</span>
+            </button>
+            <button onclick="switchTab('interaction')" class="tab-btn px-6 py-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-all duration-300 flex items-center space-x-2">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Drug Interactions</span>
+            </button>
+        </div>
+        
+        <!-- General Query Section -->
+        <div id="general-section" class="tab-content active">
+            <div class="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 card-hover">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-search mr-3 text-purple-400"></i>
+                    Ask About Medications
+                </h2>
+                
+                <div class="relative mb-6">
+                    <input type="text" id="query-input" 
+                           placeholder="e.g., What are the side effects of Crocin?" 
+                           class="w-full px-6 py-4 bg-gray-700/50 rounded-xl border border-gray-600 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400/20 transition-all duration-300"
+                           onkeypress="if(event.key==='Enter') submitQuery()">
+                    <button onclick="submitQuery()" 
+                            class="absolute right-2 top-1/2 transform -translate-y-1/2 px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 flex items-center space-x-2">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Ask</span>
+                    </button>
+                </div>
+                
+                <!-- Example Pills -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-gray-700/30 rounded-xl p-4">
+                        <h3 class="text-sm font-semibold text-purple-400 mb-3">Popular Indian Medicines</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span onclick="setQuery('What are the side effects of Crocin?')" class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm cursor-pointer hover:bg-purple-500/30 transition-all">Crocin</span>
+                            <span onclick="setQuery('Side effects of Combiflam')" class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm cursor-pointer hover:bg-purple-500/30 transition-all">Combiflam</span>
+                            <span onclick="setQuery('What is Pan 40 used for?')" class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm cursor-pointer hover:bg-purple-500/30 transition-all">Pan 40</span>
+                            <span onclick="setQuery('Dolo 650 side effects')" class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm cursor-pointer hover:bg-purple-500/30 transition-all">Dolo 650</span>
+                        </div>
+                    </div>
+                    <div class="bg-gray-700/30 rounded-xl p-4">
+                        <h3 class="text-sm font-semibold text-green-400 mb-3">Ayurvedic Medicines</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span onclick="setQuery('Ashwagandha side effects')" class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm cursor-pointer hover:bg-green-500/30 transition-all">Ashwagandha</span>
+                            <span onclick="setQuery('What is Triphala used for?')" class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm cursor-pointer hover:bg-green-500/30 transition-all">Triphala</span>
+                            <span onclick="setQuery('Tulsi side effects')" class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm cursor-pointer hover:bg-green-500/30 transition-all">Tulsi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Drug Interaction Section -->
+        <div id="interaction-section" class="tab-content hidden">
+            <div class="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 card-hover">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-capsules mr-3 text-pink-400"></i>
+                    Check Drug Interactions
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-2 text-gray-400">First Drug</label>
+                        <input type="text" id="drug1-input" 
+                               placeholder="e.g., Crocin" 
+                               class="w-full px-6 py-4 bg-gray-700/50 rounded-xl border border-gray-600 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400/20 transition-all duration-300">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2 text-gray-400">Second Drug</label>
+                        <input type="text" id="drug2-input" 
+                               placeholder="e.g., Combiflam" 
+                               class="w-full px-6 py-4 bg-gray-700/50 rounded-xl border border-gray-600 focus:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-400/20 transition-all duration-300">
+                    </div>
+                </div>
+                
+                <button onclick="checkInteraction()" 
+                        class="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 flex items-center justify-center space-x-2 font-semibold pulse-glow">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Check Interaction</span>
+                </button>
+                
+                <!-- Sample Interactions -->
+                <div class="mt-6 grid md:grid-cols-2 gap-4">
+                    <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
+                        <h3 class="text-sm font-semibold text-red-400 mb-2">⚠️ Dangerous Combination</h3>
+                        <p class="text-sm text-gray-300">Crocin + Combiflam</p>
+                        <p class="text-xs text-gray-400 mt-1">Both contain paracetamol - risk of overdose</p>
+                    </div>
+                    <div class="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+                        <h3 class="text-sm font-semibold text-green-400 mb-2">✅ Safe Combination</h3>
+                        <p class="text-sm text-gray-300">Pan 40 + Ecosprin</p>
+                        <p class="text-xs text-gray-400 mt-1">Often prescribed together</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loading State -->
+        <div id="loading" class="hidden fixed inset-0 bg-gray-900/80 backdrop-blur-sm flex items-center justify-center z-50">
+            <div class="bg-gray-800 rounded-2xl p-8 flex flex-col items-center">
+                <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-700 h-16 w-16 mb-4"></div>
+                <p class="text-gray-300">Analyzing medicine data...</p>
+            </div>
+        </div>
+        
+        <!-- Response Container -->
+        <div id="response-container" class="mt-8"></div>
+    </div>
+    
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        
+        function switchTab(tab) {
+            // Update tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-purple-600');
+                btn.classList.add('bg-gray-800');
+            });
+            event.target.closest('.tab-btn').classList.add('active', 'bg-purple-600');
+            event.target.closest('.tab-btn').classList.remove('bg-gray-800');
+            
+            // Update sections
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(`${tab}-section`).classList.remove('hidden');
+            
+            // Clear response
+            document.getElementById('response-container').innerHTML = '';
+        }
+        
+        function setQuery(query) {
+            document.getElementById('query-input').value = query;
+            submitQuery();
+        }
+        
+        function showLoading() {
+            document.getElementById('loading').classList.remove('hidden');
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+        
+        async function submitQuery() {
+            const query = document.getElementById('query-input').value;
+            if (!query.trim()) return;
+            
+            showLoading();
+            
+            try {
+                const response = await fetch(`${API_BASE}/query`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+                
+                const data = await response.json();
+                displayQueryResponse(data);
+            } catch (error) {
+                displayError('Failed to process query. Please try again.');
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        async function checkInteraction() {
+            const drug1 = document.getElementById('drug1-input').value;
+            const drug2 = document.getElementById('drug2-input').value;
+            
+            if (!drug1.trim() || !drug2.trim()) {
+                displayError('Please enter both drug names.');
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                const response = await fetch(`${API_BASE}/check-interaction`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ drug1, drug2 })
+                });
+                
+                const data = await response.json();
+                displayInteractionResponse(data);
+            } catch (error) {
+                displayError('Failed to check interaction. Please try again.');
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        function displayQueryResponse(data) {
+            const container = document.getElementById('response-container');
+            const drugsHtml = data.drugs_identified.length > 0 
+                ? `<div class="flex flex-wrap gap-2 mt-4">
+                     ${data.drugs_identified.map(drug => 
+                       `<span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">
+                          <i class="fas fa-pills mr-1"></i>${drug}
+                        </span>`
+                     ).join('')}
+                   </div>` 
+                : '';
+            
+            container.innerHTML = `
+                <div class="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 card-hover animate-fadeIn">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-robot text-white"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold mb-4 gradient-text">AI Response</h3>
+                            <div class="bg-gray-700/30 rounded-xl p-6">
+                                <p class="text-gray-200 leading-relaxed">${data.response}</p>
+                                ${drugsHtml}
+                            </div>
+                            <div class="mt-4 flex items-center justify-between text-sm text-gray-400">
+                                <span><i class="fas fa-database mr-1"></i> Sources: ${data.sources_used}</span>
+                                <span><i class="fas fa-tag mr-1"></i> Type: ${data.query_type}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
+                        <p class="text-sm text-yellow-300">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            <strong>Disclaimer:</strong> This information is for educational purposes only. Always consult with a healthcare professional before making any decisions about medications.
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function displayInteractionResponse(data) {
+            const container = document.getElementById('response-container');
+            const interactionClass = data.interaction_found 
+                ? 'bg-red-500/10 border-red-500/30 text-red-300' 
+                : 'bg-green-500/10 border-green-500/30 text-green-300';
+            
+            const icon = data.interaction_found 
+                ? '<i class="fas fa-exclamation-circle text-red-400 text-2xl"></i>' 
+                : '<i class="fas fa-check-circle text-green-400 text-2xl"></i>';
+            
+            container.innerHTML = `
+                <div class="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 card-hover animate-fadeIn">
+                    <div class="flex items-center space-x-4 mb-6">
+                        ${icon}
+                        <h3 class="text-xl font-bold">Drug Interaction Analysis</h3>
+                    </div>
+                    
+                    <div class="flex items-center justify-center space-x-4 mb-6">
+                        <div class="px-6 py-3 bg-purple-500/20 rounded-xl">
+                            <i class="fas fa-pills mr-2"></i>${data.drug1}
+                        </div>
+                        <i class="fas fa-exchange-alt text-gray-500"></i>
+                        <div class="px-6 py-3 bg-pink-500/20 rounded-xl">
+                            <i class="fas fa-pills mr-2"></i>${data.drug2}
+                        </div>
+                    </div>
+                    
+                    <div class="${interactionClass} border rounded-xl p-6 mb-6">
+                        <p class="leading-relaxed">${data.response}</p>
+                    </div>
+                    
+                    <div class="flex items-center justify-between text-sm text-gray-400">
+                        <span><i class="fas fa-shield-alt mr-1"></i> Interaction: ${data.interaction_found ? 'Found' : 'Not Found'}</span>
+                        <span><i class="fas fa-database mr-1"></i> ${data.sources.join(', ')}</span>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
+                        <p class="text-sm text-yellow-300">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            <strong>Important:</strong> Always consult your doctor or pharmacist before taking multiple medications together.
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function displayError(message) {
+            const container = document.getElementById('response-container');
+            container.innerHTML = `
+                <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6 animate-fadeIn">
+                    <p class="text-red-300">
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        ${message}
+                    </p>
+                </div>
+            `;
+        }
+        
+        // Add fade-in animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fadeIn {
+                animation: fadeIn 0.5s ease-out;
+            }
+            @keyframes blob {
+                0% { transform: translate(0px, 0px) scale(1); }
+                33% { transform: translate(30px, -50px) scale(1.1); }
+                66% { transform: translate(-20px, 20px) scale(0.9); }
+                100% { transform: translate(0px, 0px) scale(1); }
+            }
+            .animate-blob {
+                animation: blob 7s infinite;
+            }
+            .animation-delay-2000 {
+                animation-delay: 2s;
+            }
+            .animation-delay-4000 {
+                animation-delay: 4s;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
