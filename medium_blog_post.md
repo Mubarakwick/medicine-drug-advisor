@@ -314,7 +314,7 @@ services:
 
 ## Code Repository
 
-The complete code is available on GitHub: [medicine-drug-advisor](https://github.com/yourusername/medicine-drug-advisor)
+The complete code is available on GitHub: [medicine-drug-advisor](https://github.com/sumankrsh/medicine-drug-advisor)
 
 Key files:
 - `backend/rag_pipeline.py` - RAG implementation
