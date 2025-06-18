@@ -182,7 +182,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 Your Name - [@yourtwitter](https://twitter.com/yourtwitter)
 
-Project Link: [https://github.com/yourusername/medicine-drug-advisor](https://github.com/yourusername/medicine-drug-advisor)
+Project Link: [[https://github.com/sumankrsh/medicine-drug-advisor]
 
 ---
 
