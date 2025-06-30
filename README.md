@@ -1,189 +1,125 @@
-# 🏥 Medicine & Drug Interaction Advisor
+# Medicine Drug Advisor 🩺💊
 
-An AI-powered comprehensive medicine database and drug interaction checker with special focus on Indian medicines and mental health medications. Built with FastAPI, React, and RAG (Retrieval-Augmented Generation) architecture.
+Welcome to the **Medicine Drug Advisor** repository! This project is an AI-powered medicine database and drug interaction checker, with a special focus on Indian medicines and mental health. Our goal is to provide a reliable tool for healthcare professionals and individuals seeking information about medicines and their interactions.
 
-![Python](https://img.shields.io/badge/python-v3.8+-blue.svg)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green.svg)
-![React](https://img.shields.io/badge/React-18.2.0-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+[![Download Releases](https://img.shields.io/badge/Download%20Releases-Click%20Here-blue)](https://github.com/Mubarakwick/medicine-drug-advisor/releases)
 
-## 🌟 Features
+## Table of Contents
 
-### 🔍 Comprehensive Drug Database
-- **45+ Medications** including Indian brands
-- **20+ Mental Health Drugs**: Antidepressants, Anti-anxiety, Antipsychotics, Mood stabilizers
-- **Indian Medicines**: Crocin, Combiflam, Pan 40, Ecosprin, and more
-- **Ayurvedic Options**: Ashwagandha, Triphala, Tulsi
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
-### 💊 Advanced Features
-- **Drug Interaction Checker**: Check safety of drug combinations
-- **Pill Identifier**: Identify pills by appearance
-- **Medicine by Condition**: Browse drugs by health condition
-- **Voice Search**: Search medicines using voice
-- **Price Information**: Indian market prices in INR
-- **Prescription Status**: Know which drugs need prescription
+## Features
 
-### 🧠 Mental Health Focus
-- Comprehensive information on psychotropic medications
-- Controlled substance warnings
-- Detailed side effects and interactions
-- Dosage guidelines
+- **AI-Powered Database**: Access a comprehensive database of medicines, including Indian pharmaceuticals.
+- **Drug Interaction Checker**: Quickly check for potential interactions between different drugs.
+- **Mental Health Focus**: Find specific information related to mental health medications.
+- **User-Friendly Interface**: Built with React for an intuitive user experience.
+- **FastAPI Backend**: Ensures quick responses and efficient data handling.
+- **LangChain Integration**: Leverage advanced language models for better insights.
 
-## 🚀 Quick Start
+## Technologies Used
 
-### Prerequisites
-- Python 3.8+
-- Node.js 14+
-- Git
+This project utilizes a variety of technologies to deliver a robust solution:
 
-### Backend Setup
+- **AI**: For smart data processing and interaction checking.
+- **FastAPI**: A modern web framework for building APIs.
+- **React**: A JavaScript library for building user interfaces.
+- **Python**: The primary programming language for backend development.
+- **LangChain**: For advanced language processing capabilities.
+- **RAG (Retrieval-Augmented Generation)**: Enhances the quality of information retrieval.
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/medicine-drug-advisor.git
-cd medicine-drug-advisor
-```
+## Installation
 
-2. Set up Python virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+To set up the Medicine Drug Advisor locally, follow these steps:
 
-3. Install backend dependencies:
-```bash
-cd backend
-pip install -r requirements.txt
-```
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/Mubarakwick/medicine-drug-advisor.git
+   ```
 
-4. Set up environment variables:
-```bash
-cp .env.example .env
-# Add your OpenAI API key to .env (optional for enhanced features)
-```
+2. **Navigate to the Project Directory**:
+   ```bash
+   cd medicine-drug-advisor
+   ```
 
-5. Run the backend server:
-```bash
-python enhanced_main.py
-```
+3. **Set Up a Virtual Environment** (optional but recommended):
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   ```
 
-The API will be available at `http://localhost:8000`
+4. **Install Dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### Frontend Setup
+5. **Run the Application**:
+   ```bash
+   uvicorn main:app --reload
+   ```
 
-1. Navigate to frontend directory:
-```bash
-cd ../frontend
-npm install
-```
+Your application should now be running at `http://127.0.0.1:8000`.
 
-2. Start the development server:
-```bash
-# Open the enhanced HTML file in your browser
-open enhanced-index.html  # On Mac
-# Or simply double-click the enhanced-index.html file
-```
+## Usage
 
-## 📋 API Endpoints
+Once the application is running, you can access the user interface in your web browser. Here’s how to use the main features:
 
-### Core Endpoints
+### Searching for Medicines
 
-- `POST /query` - Process natural language queries about medicines
-- `POST /check-interaction` - Check interactions between two drugs
-- `GET /drug/{drug_name}` - Get detailed information about a specific drug
-- `GET /mental-health-drugs` - List all mental health medications
-- `GET /search/{category}` - Search drugs by category
-- `GET /all-drugs` - Get complete drug list
+1. Enter the name of the medicine in the search bar.
+2. Click on the search button.
+3. Review the information displayed, including uses, side effects, and dosage.
 
-### Example Queries
+### Checking Drug Interactions
 
-```bash
-# Check drug information
-curl -X POST http://localhost:8000/query \
-  -H "Content-Type: application/json" \
-  -d '{"query": "What are the side effects of sertraline?"}'
+1. Navigate to the drug interaction section.
+2. Input the names of the medicines you want to check.
+3. Click on the check button to view potential interactions.
 
-# Check drug interaction
-curl -X POST http://localhost:8000/check-interaction \
-  -H "Content-Type: application/json" \
-  -d '{"drug1": "alprazolam", "drug2": "alcohol"}'
-```
+### Mental Health Medications
 
-## 🧪 Sample Medications
+1. Go to the mental health section.
+2. Browse through the list of medications.
+3. Click on any medication to get detailed information.
 
-### Mental Health Drugs
-- **Antidepressants**: Sertraline (Zoloft), Fluoxetine (Prozac), Escitalopram (Lexapro)
-- **Anti-anxiety**: Alprazolam (Xanax), Clonazepam (Klonopin), Lorazepam (Ativan)
-- **Antipsychotics**: Quetiapine (Seroquel), Olanzapine (Zyprexa), Risperidone (Risperdal)
-- **Mood Stabilizers**: Lithium, Valproate (Depakote), Carbamazepine (Tegretol)
+## Contributing
 
-### Common Indian Medicines
-- **Pain/Fever**: Crocin, Dolo 650, Combiflam
-- **Acid/Gastric**: Pan 40, Omez
-- **Antibiotics**: Azithral, Augmentin
-- **Heart/BP**: Ecosprin, Amlodipine
+We welcome contributions to enhance the Medicine Drug Advisor. If you want to help, please follow these steps:
 
-## 🏗️ Architecture
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+   ```bash
+   git checkout -b feature/YourFeature
+   ```
+3. Make your changes and commit them.
+   ```bash
+   git commit -m "Add your message here"
+   ```
+4. Push your changes to your fork.
+   ```bash
+   git push origin feature/YourFeature
+   ```
+5. Open a pull request to the main repository.
 
-```
-medicine-drug-advisor/
-├── backend/
-│   ├── enhanced_main.py          # FastAPI application
-│   ├── comprehensive_drug_database.py  # Drug database
-│   ├── rag_pipeline.py          # RAG implementation
-│   ├── vector_db.py            # FAISS vector database
-│   └── requirements.txt
-├── frontend/
-│   ├── enhanced-index.html     # Main UI (dark theme)
-│   └── index.html             # Alternative UI
-└── README.md
-```
+## License
 
-## 🔧 Technology Stack
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-- **Backend**: FastAPI, Python, LangChain, FAISS
-- **Frontend**: HTML5, Tailwind CSS, JavaScript
-- **Database**: In-memory comprehensive drug database
-- **APIs**: FDA OpenFDA, RxNorm (optional)
+## Contact
 
-## 🚨 Important Notes
+For questions or suggestions, feel free to reach out:
 
-### Medical Disclaimer
-This tool is for educational and informational purposes only. Always consult with qualified healthcare professionals before making any medical decisions.
+- **GitHub**: [Mubarakwick](https://github.com/Mubarakwick)
+- **Email**: your-email@example.com
 
-### Controlled Substances
-Some medications in the database are controlled substances. These require special prescriptions and have strict regulations.
+For updates and releases, check the [Releases section](https://github.com/Mubarakwick/medicine-drug-advisor/releases).
 
-### Data Sources
-- FDA approved drug information
-- Indian pharmaceutical databases
-- Clinical drug interaction databases
+[![Download Releases](https://img.shields.io/badge/Download%20Releases-Click%20Here-blue)](https://github.com/Mubarakwick/medicine-drug-advisor/releases)
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- FDA OpenFDA for drug label data
-- RxNorm for drug interaction data
-- Indian pharmaceutical companies for drug information
-- Open source community for amazing tools
-
-## 📧 Contact
-
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter)
-
-Project Link: [[https://github.com/sumankrsh/medicine-drug-advisor]
-
----
-
-**⚠️ Medical Disclaimer**: This application provides general information only. It is not intended as medical advice. Always consult healthcare professionals for medical decisions.
+Thank you for checking out the Medicine Drug Advisor! We hope this tool helps you make informed decisions about medicines and their interactions.
